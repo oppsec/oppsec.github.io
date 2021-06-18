@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&family=Major+Mono+Display&display=swap');
+
+:root {
+
+    --bg: #06080a;
+    --fg: #a9b1d6;
+
+    --blue: #7da6ff;
+    --green: #9ECE6A;
+    --purple: #ad8ee6;
+    --yellow: #E0AF68;
+
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    text-decoration: none !important;
+    outline: none !important;
+}
+
+body {
+    background: var(--bg) !important;
+    color: var(--fg) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+#border {
+    border: 2px solid #9a7ecc;
+    padding: 2rem !important;
+    margin: 2rem !important;
+}
+
+/* --------------------------- */
+.hero h1 {
+    font-family: 'Major Mono Display', monospace;
+    color: var(--purple);
+}
+
+.hero p {
+    color: var(--green);
+}
+/* --------------------------- */
+
+.content p {
+    color: var(--blue);
+}
+
+.content span {
+    color: var(--green);
+}
+
+.content .greetz {
+    color: var(--yellow);
+}
