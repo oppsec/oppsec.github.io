@@ -25,6 +25,11 @@ body {
     background: var(--bg) !important;
     color: var(--fg) !important;
     font-family: 'JetBrains Mono', monospace !important;
+
+    background-image: url('/assets/img/bg.gif') !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
 }
 
 #border {
@@ -51,6 +56,10 @@ body {
 
 .content p {
     color: var(--blue);
+}
+
+.content p:hover {
+    color: var(--yellow);
 }
 
 .content span {
