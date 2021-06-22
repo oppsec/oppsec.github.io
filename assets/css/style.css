@@ -25,11 +25,6 @@ body {
     background: var(--bg) !important;
     color: var(--fg) !important;
     font-family: 'JetBrains Mono', monospace !important;
-
-    background-image: url('/assets/img/bg.gif') !important;
-    background-attachment: fixed !important;
-    background-repeat: no-repeat !important;
-    background-size: cover !important;
 }
 
 #border {
