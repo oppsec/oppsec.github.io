@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Automating JavaScript Secret Scanning with ProjectDiscovery toolkit - Simple Techniques #1 - oppsec&#39;s blog</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta itemprop="name" content="Automating JavaScript Secret Scanning with ProjectDiscovery toolkit - Simple Techniques #1">
+<meta itemprop="description" content="A simple and practical guide on how we can automate JavaScript file scanning with ProjectDiscovery tools"><meta itemprop="datePublished" content="2024-03-28T16:25:49-03:00" />
+<meta itemprop="dateModified" content="2024-03-28T16:25:49-03:00" />
+<meta itemprop="wordCount" content="751">
+<meta itemprop="keywords" content="pentest,javascript,automation,bug bounty," /><meta property="og:title" content="Automating JavaScript Secret Scanning with ProjectDiscovery toolkit - Simple Techniques #1" />
+<meta property="og:description" content="A simple and practical guide on how we can automate JavaScript file scanning with ProjectDiscovery tools" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//localhost:1313/posts/automatting-javascript-projectdiscovery/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-03-28T16:25:49-03:00" />
+<meta property="article:modified_time" content="2024-03-28T16:25:49-03:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Automating JavaScript Secret Scanning with ProjectDiscovery toolkit - Simple Techniques #1"/>
+<meta name="twitter:description" content="A simple and practical guide on how we can automate JavaScript file scanning with ProjectDiscovery tools"/>
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" media="screen" href="//localhost:1313/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="//localhost:1313/css/main.css" />
+
+        <link id="dark-scheme" rel="stylesheet" type="text/css" href="//localhost:1313/css/dark.css" />
+
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+		<script src="//localhost:1313/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper">
+		<div class="header">
+	
+		<div class="avatar">
+			<a href="//localhost:1313/">
+				<img src="https://avatars.githubusercontent.com/u/50470310" alt="oppsec&#39;s blog" />
+			</a>
+		</div>
+	
+	<h1 class="site-title"><a href="//localhost:1313/">oppsec&#39;s blog</a></h1>
+	<div class="site-description"><nav class="nav social">
+			<ul class="flat"><li><a href="https://github.com/oppsec/" title="Github"><i data-feather="github"></i></a></li><li><a href="https://twitter.com/opps3c" title="Twitter"><i data-feather="twitter"></i></a></li><li><a href="https://linkedin.com/in/dansdm" title="LinkedIn"><i data-feather="linkedin"></i></a></li></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">All posts</a>
+			</li>
+			
+			<li>
+				<a href="/tags">Tags</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post">
+			<div class="post-header">
+				
+					<div class="meta">
+						<div class="date">
+							<span class="day">28</span>
+							<span class="rest">Mar 2024</span>
+						</div>
+					</div>
+				
+				<div class="matter">
+					<h1 class="title">Automating JavaScript Secret Scanning with ProjectDiscovery toolkit - Simple Techniques #1</h1>
+				</div>
+			</div>
+					
+			<div class="markdown">
+				<h2 id="introduction">Introduction</h2>
+<p>Hello guys, I hope you&rsquo;re doing well. I am Daniel (a.k.a oppsec), a pentester from a Brazilian company and a bug hunter in my free time.
+I would like to share with you some interesting automation that I&rsquo;ve done with the <a href="https://github.com/projectdiscovery/">ProjectDiscovery</a> toolkit.</p>
+<p>For you guys that don&rsquo;t know, <strong>ProjectDiscovery</strong> is the team responsible for the development of various tools like Nuclei, Httpx, Katana, DnsX, and a lot more&hellip; I really like the entire
+project and the intention of making some pentest processes easier and automated is so useful. I&rsquo;ve been using Nuclei, Httpx, and other toiols by him and everything always worked fine for me.</p>
+<p>Basically, I will show how can you combine some of ProjectDiscovery&rsquo;s tools and automate the JavaScript crawling and secret scanning by combining Subfinder + Httpx + Katana and Nuclei (with nuclei-templates).</p>
+<figure><img src="https://compote.slate.com/images/d821ec33-6e11-4cf1-a5e1-64e48f0173b7.jpeg">
+</figure>
+
+<hr>
+<h2 id="setup">Setup</h2>
+<p>To start, you need to install all the tools that we&rsquo;re going to use. Expecting you already have Go 1.21+ installed on your machine, there are the commands to install the tools:</p>
+<ul>
+<li>Nuclei</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+</span></span></code></pre></div><ul>
+<li>Subfinder</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+</span></span></code></pre></div><ul>
+<li>Httpx</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+</span></span></code></pre></div><ul>
+<li>Katana</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/katana/cmd/katana@latest
+</span></span></code></pre></div><p>Make sure to have the <code>GOPATH</code> environment variable defined in the correct place so you can call the tools from your terminal.</p>
+<blockquote>
+<p>To install nuclei-templates you need to execute nuclei cmd at least one time.</p>
+</blockquote>
+<hr>
+<h2 id="the-begin">The Begin</h2>
+<p>After installing all the tools, we can start using them and make some magic 🧙. To begin, we need to enumerate our target subdomains to after that capture some endpoints, we&rsquo;re going to use Subfinder to enumerate all the subdomains. I recommend you guys <a href="https://highon.coffee/blog/subfinder-cheat-sheet/">set up some API keys that Subfinder can work with</a>, that&rsquo;s gonna help you find some more subdomains than the default one.</p>
+<p>The command we&rsquo;re going to use is <strong><code>subfinder -all -d target.domain -o domains.txt</code></strong>. We can expect some result like this:
+<img src="https://i.imgur.com/JaUc6vx.png" alt="subfinder"></p>
+<p>After enumerating all the subdomains and saving the output to a text file, we need to check which one is alive or not. You can use this command: <strong><code>httpx -l domains.txt -o domains.httpx</code></strong></p>
+<p><em>Tip: You can specify custom ports like 8080, 8081, 81, and others to find other services that are running on the same host.</em></p>
+<figure><img src="https://i.imgur.com/OGKJUFH.png">
+</figure>
+
+<p>This is one of the principal processes that we&rsquo;re going to use to get the JavaScript files. We will use Katana to capture the endpoints from the subdomains that we found before and search for JavaScript files with the <code>-jc</code> flag. I will use this command, but you can improve him with grep and other binaries: <strong><code>cat domains.httpx | katana -jc -o endpoints.txt</code></strong></p>
+<figure><img src="https://i.imgur.com/pOE0fc3.png">
+</figure>
+
+<p>With all endpoints captured, we are going to filter by the endpoints that end with <em>.js</em>, we can use grep: <strong><code>grep '.js' endpoints.txt &gt; js_files.txt</code></strong>. The problem here is that will take <em>.json</em> files too, so we can remove the endpoints that end with <em>.json</em> with grep <strong>-v</strong> flag: <strong><code>grep -v '.json' js_files.txt &gt; js_files_cleaned.txt</code></strong>.</p>
+<p><figure><img src="https://i.imgur.com/uaQUI3v.png">
+</figure>
+
+<figure><img src="https://i.imgur.com/acyk9Ou.png">
+</figure>
+</p>
+<p>After that, we need to save all the JavaScript files. We’re going to use <em>cURL</em> and <em>xargs</em> binaries to save the files in our directory. We can also use awk to get the domain name and the file name to identify the file after the scan. Before executing the command below, make sure to create a new directory to save all the js files, as you can see, I&rsquo;m using <strong><code>../</code></strong> assuming we&rsquo;re already in another directory</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>while read url; do
+</span></span><span style="display:flex;"><span>  filename=$(echo $url | awk -F/ &#39;{gsub(/[\/:]/, &#34;-&#34;, $3); print $3 &#34;-&#34; $NF}&#39;)
+</span></span><span style="display:flex;"><span>  curl &#34;$url&#34; &gt; &#34;${filename}.js&#34;
+</span></span><span style="display:flex;"><span>done &lt; ../js_files_cleaned.txt
+</span></span></code></pre></div><figure><img src="https://i.imgur.com/CErGIC0.png">
+</figure>
+
+<hr>
+<h2 id="the-final">The final</h2>
+<p>The final result of the command is gonna be something like this:</p>
+<figure><img src="https://i.imgur.com/VIvgXOx.png">
+</figure>
+
+<p>Now, to find the possible leaked secrets on the code, we&rsquo;re going to use nuclei + nuclei-templates. That&rsquo;s the command I&rsquo;ve been using and everything worked fine for me.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>find &lt;js_files_path&gt; -type f -name &#34;*.js&#34; | while read jsfile; do nuclei -t ~/nuclei-templates/file/ -target &#34;$jsfile&#34; -severity low,medium,high,critical -et ~/nuclei-templates/file/xss/dom-xss.yaml; done
+</span></span></code></pre></div><p><figure><img src="https://i.imgur.com/TjDh4oE.png">
+</figure>
+
+<figure><img src="https://i.imgur.com/a5hZ5ql.png">
+</figure>
+</p>
+<hr>
+<h2 id="warnings-and-final-thoughts">Warnings and Final Thoughts</h2>
+<ul>
+<li>You’re probably going to be blocked by the WAF, so be careful.</li>
+<li>Of course, they&rsquo;re gonna be so many false positives so be patient and check if the tool report is valid.</li>
+<li>There are probably so many better ways to do this, but I think this method is a good way too. Use it if you want.</li>
+<li>I&rsquo;m not sharing this to prove anything, I&rsquo;m sharing because I think is gonna be useful to people who want to try other things.</li>
+</ul>
+<hr>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://highon.coffee/blog/subfinder-cheat-sheet/">Subfinder Cheatsheet</a></li>
+<li><a href="https://github.com/projectdiscovery">ProjectDiscovery</a></li>
+<li><a href="https://www.youtube.com/watch?v=9d1D-DB6BkE">Davis Sopas -  Using katana to get API endpoints</a></li>
+</ul>
+<h3 id="tags">Tags</h3>
+
+			</div>
+
+			<div class="tags">
+				
+					
+						<ul class="flat">
+							
+							<li><a href="/tags/pentest">pentest</a></li>
+							
+							<li><a href="/tags/javascript">javascript</a></li>
+							
+							<li><a href="/tags/automation">automation</a></li>
+							
+							<li><a href="/tags/bug-bounty">bug bounty</a></li>
+							
+						</ul>
+					
+				
+			</div></div>
+	</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div>2024  <a href="https://github.com/knadh/hugo-ink">Ink</a> theme on <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+<script>feather.replace()</script>
+</body>
+</html>

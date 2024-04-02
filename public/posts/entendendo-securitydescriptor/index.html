@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Entendendo o que é o Security Descriptor (🇧🇷) - oppsec&#39;s blog</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta itemprop="name" content="Entendendo o que é o Security Descriptor (🇧🇷)">
+<meta itemprop="description" content="O Security Descriptor ou ntSecurityDescriptor é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto. Como podemos utilizar ele em segurança ofensiva?"><meta itemprop="datePublished" content="2024-03-30T12:20:49-03:00" />
+<meta itemprop="dateModified" content="2024-03-30T12:20:49-03:00" />
+<meta itemprop="wordCount" content="1215">
+<meta itemprop="keywords" content="pentest,active directory,red team,ldap," /><meta property="og:title" content="Entendendo o que é o Security Descriptor (🇧🇷)" />
+<meta property="og:description" content="O Security Descriptor ou ntSecurityDescriptor é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto. Como podemos utilizar ele em segurança ofensiva?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//localhost:1313/posts/entendendo-securitydescriptor/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-03-30T12:20:49-03:00" />
+<meta property="article:modified_time" content="2024-03-30T12:20:49-03:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Entendendo o que é o Security Descriptor (🇧🇷)"/>
+<meta name="twitter:description" content="O Security Descriptor ou ntSecurityDescriptor é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto. Como podemos utilizar ele em segurança ofensiva?"/>
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" media="screen" href="//localhost:1313/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="//localhost:1313/css/main.css" />
+
+        <link id="dark-scheme" rel="stylesheet" type="text/css" href="//localhost:1313/css/dark.css" />
+
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+		<script src="//localhost:1313/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper">
+		<div class="header">
+	
+		<div class="avatar">
+			<a href="//localhost:1313/">
+				<img src="https://avatars.githubusercontent.com/u/50470310" alt="oppsec&#39;s blog" />
+			</a>
+		</div>
+	
+	<h1 class="site-title"><a href="//localhost:1313/">oppsec&#39;s blog</a></h1>
+	<div class="site-description"><nav class="nav social">
+			<ul class="flat"><li><a href="https://github.com/oppsec/" title="Github"><i data-feather="github"></i></a></li><li><a href="https://twitter.com/opps3c" title="Twitter"><i data-feather="twitter"></i></a></li><li><a href="https://linkedin.com/in/dansdm" title="LinkedIn"><i data-feather="linkedin"></i></a></li></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">All posts</a>
+			</li>
+			
+			<li>
+				<a href="/tags">Tags</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post">
+			<div class="post-header">
+				
+					<div class="meta">
+						<div class="date">
+							<span class="day">30</span>
+							<span class="rest">Mar 2024</span>
+						</div>
+					</div>
+				
+				<div class="matter">
+					<h1 class="title">Entendendo o que é o Security Descriptor (🇧🇷)</h1>
+				</div>
+			</div>
+					
+			<div class="markdown">
+				<figure><img src="https://i.imgur.com/berSDkH.jpeg">
+</figure>
+
+<h2 id="o-que-é-o-ntsecuritydescriptor">O que é o ntSecurityDescriptor?</h2>
+<p>O Security Descriptor ou ntSecurityDescriptor, é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto em questão. Podemos interpretar o mesmo como uma ideia do escopo de permissões do X sobre Y. O ntSecurityDescriptor está presente desde as versões superiores do Windows Server 2000 e se manteve o mesmo desde então.</p>
+<p>O Security Descriptor é uma representação binária compactada da segurança associada a objeto pertecente ao ambiente. Para comprovação disso, podemos tentar extrair o Security Descriptor de um usuário ou grupo por meio de uma query LDAP e vermos seu formato puro.</p>
+<figure><img src="https://i.imgur.com/RgHliHz.png">
+</figure>
+
+<p>É importante salientar que o ntSecurityDescriptor é utilizado por DACLs, SACLs, e ACL. Esses três atributos são responsáveis por representar as permissões desse objeto consumindo os dados do ntSecurityDescriptor. Essas permissões são de quem representa aquele objeto, quem pode acessar esse objeto e o que pode fazer com o mesmo, informações de auditoria do objeto e restrições sobre tal.</p>
+<ul>
+<li>ACL: Access Control List é uma lista de proteções de seguranças que são aplicadas sobre um objeto. Deve-se entender que objetos podem ser um arquivo, processo, evento, ou tudo aquilo que também tiver um “Security Descriptor”;</li>
+<li>ACE: Access Control Entries são entrada de dados de ACLs (Access Control List). Uma ACE contém uma lista de permissões sobre um SID que irá identificar se tais permissões participam dos escopos: Allowed, Denied ou Audited;</li>
+<li>DACL: Discretionary Access Control List é o responsável por identificar os administradores ou objetos que tem permissões ou não sobre objetos protegidos. Caso um processo tente interagir com um objeto protegido, o sistema irá requisitar ao que ACE busque na DACL se aquele autor em questão tem as permissões necessárias;</li>
+<li>SACL: System Access Control List é uma lista que permite que adminstradores registrem tentativas de interação ou acesso a um objeto protegido. Cada ACE irá especificar as tentativas de acesso sobre aquele item e fará com que o sistema armazene essa tentativa no Security Event Log;</li>
+</ul>
+<figure><img src="https://i.imgur.com/XBBn0wT.png">
+</figure>
+
+<p>De acordo com a Microsoft, o ntSecurityDescriptor utiliza de um sistema chamado “Security Descriptor String Format”. O “Security Descriptor String Format” é um formato ou sistema de texto responsável por armazenar ou transportar a informação do ntSecurityDescriptor. Isso é feito por duas funções chamadas ConvertSecurityDescriptorToStringSecurityDescriptorA e ConvertStringSecurityDescriptorToSecurityDescriptorA. Essas duas funções são utilizadas para o trabalho de conversão dos Security Descriptor.</p>
+<p>É possível transformar um String Security Descriptor para um Security Descriptor Absoluto através de outra função que é chamada de MakeAbsoluteSD. Essas três funções iram retornar valores não nulos, caso todos os argumentos necessários forem repassados e serem válidos. Com o seu retorno, é possível extrair o formato do Security Descriptor.</p>
+<p>Para que as funções citadas acima possam descrever o formato do Security Descriptor, é utilizado a tecnologia SDDL (Security Descriptor Definition Language) que irá fazer essa tradução e permitir que as funções possam representar elas em texto. Aqui estão alguns exemplos de SDDL retirados do artigo da Microsoft:</p>
+<p><strong>Regra</strong>: Qualquer usuário poderá executar esse objeto se ele seguir as seguintes condições:</p>
+<ol>
+<li>Seu login ter sido feito a partir de um Smart Card</li>
+<li>É pertecente do grupo Backup Operator</li>
+<li>Está conectado em uma máquina com o BitLocker ativo</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>D:(XA; ;FR;;;S-1-1-0; (Member_of {SID(Smartcard_SID), SID(BO)} &amp;&amp;@Device.Bitlocker))
+</span></span></code></pre></div><p><strong>Regra</strong>: Qualquer usuário poderá executar esse objeto se ele seguir as seguintes condições:</p>
+<ol>
+<li>O título do usuário deve ser &ldquo;PM&rdquo;</li>
+<li>A divisão ou setor dele for Financeiro ou Vendas</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>d:(XA; ;FX;;;S-1-1-0; (@User.Title==&#34;PM&#34; &amp;&amp; (@User.Division==&#34;Financeiro&#34; || @User.Division ==&#34;Vendas&#34;)))
+</span></span></code></pre></div><h2 id="qual-a-sua-importância">Qual a sua importância?</h2>
+<p>Através do ntSecurityDescriptor, pode-se compreender qual o escopo de privilégios que aquele ativo terá sobre um item de seu interesse ou que haverá uma possível interação. Com isso em mente, a Microsoft desenvolveu esse atributo expressivo para que fosse alocado sobre os objetos do ambiente Active Directory e pudesse trabalhar as questões de controle de acesso. Atualmente, ele é utilizado por outras classes do ambiente Active Directory como:</p>
+<ul>
+<li>samDomainBase: A classe base para a definição de domínios;</li>
+<li>securityPrincipal: Armazena informações de segura sobre um objeto;</li>
+<li>top: A classe de mais alto nível que é de onde todas as classes derivam;</li>
+</ul>
+<p>Hoje em dia, ferramentas como o BloodHound usufruem de ACEs e DACLs para identificar as permissões que um objeto tem sobre o outro, e assim, poder construir caminhos de exploração por meio de fragilidades do objeto X sobre o objeto Y.</p>
+<h2 id="trabalhando-com-o-ntsecuritydescriptor">Trabalhando com o ntSecurityDescriptor</h2>
+<p>O ntSecurityDescriptor segue o formato <code>O:BAG:BAD:S:</code>, onde:</p>
+<ul>
+<li>O é Owner</li>
+<li>BAG e BAD serão utilizados para representar quem tem permissão de interação e quem não tem sobre aquele objeto. G é Granted e D é Deny.</li>
+<li>S representará o SACL.</li>
+</ul>
+<p>O atributo Owner irá indicar o proprietário por meio do SID do objeto, o BAG e o BAD são especificadores de controle de acesso e o SACL para poder armazenar as tentativas de interação com o objeto alvo. De uma maneira simples, se expandíssemos um Security Descriptor, esse seria o formato dele:</p>
+<figure><img src="https://i.imgur.com/yXKn8Dg.png"
+    alt="Fonte: https://learn.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format?redirectedfrom=MSDN"><figcaption>
+      <p>Fonte: <a href="https://learn.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format?redirectedfrom=MSDN">https://learn.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format?redirectedfrom=MSDN</a></p>
+    </figcaption>
+</figure>
+
+<p>Como podemos ver, o Owner e PrimaryGroup são as representações do proprietário daquele Security Descriptor. Com isso, podemos partir para a leitura da DACL que trará informações sobre a ACE do objeto protegido. Em um contexto de segurança ofensiva, o que diretamente nos importa seria o Access Mask dessa ACE.</p>
+<p>Com isso em mente, podemos capturar o Security Descriptor de objetos (usuários, grupos, etc) e lermos suas permissões e identificar possíveis fragilidades que atacantes podem utilizar para escalonar privilégios dentro de um ambiente Active Directory. Para isso, incrementei um módulo na minha ferramenta (breads) que irá buscar pelo valor do ntSecurityDescriptor de todos os objetos do ambiente através da query <code>(objectClass=*)</code> e checar as permissões se baseando no valor de <strong>ACE_MASK</strong>.</p>
+<p>Esses valores são hexadecimais que quando calculados, podem ser lidos como bytes representantes de permissão. Essa é a tabela de permissões:
+<figure><img src="https://i.imgur.com/pYKSf26.png"
+    alt="Fonte: https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/7d4dac05-9cef-4563-a058-f108abecce1d"><figcaption>
+      <p>Fonte: <a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/7d4dac05-9cef-4563-a058-f108abecce1d">https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/7d4dac05-9cef-4563-a058-f108abecce1d</a></p>
+    </figcaption>
+</figure>
+</p>
+<p>Abaixo estará o pedaço do código da minha ferramenta que irá realizar essa busca. O object_ntsd representa o acesso ao atributo ntSecurityDescriptor daquele objeto; já a variável sd está utilizando de uma classe do projeto Impacket para realizar a leitura dos bytes do Security Descriptor. Por fim, percorremos pelas chaves retornada da variável sd e acessamos seus valores respectivamente.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#008000"># ...</span>
+</span></span><span style="display:flex;"><span>object_ntsd = attribute[<span style="color:#a31515">&#34;attributes&#34;</span>][<span style="color:#a31515">&#34;nTSecurityDescriptor&#34;</span>]
+</span></span><span style="display:flex;"><span>sd = SR_SECURITY_DESCRIPTOR(data=object_ntsd)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">if</span> sd[<span style="color:#a31515">&#34;Dacl&#34;</span>]:
+</span></span><span style="display:flex;"><span>	<span style="color:#00f">for</span> ace <span style="color:#00f">in</span> sd[<span style="color:#a31515">&#34;Dacl&#34;</span>].aces:
+</span></span><span style="display:flex;"><span>		ace_object = ace[<span style="color:#a31515">&#34;Ace&#34;</span>]  <span style="color:#008000"># Ace_Object Vars: Mask, Sid</span>
+</span></span><span style="display:flex;"><span>    	ace_mask = ace_object[<span style="color:#a31515">&#34;Mask&#34;</span>][<span style="color:#a31515">&#34;Mask&#34;</span>]
+</span></span></code></pre></div><p>Após um tratamento sobre os hexadecimais retornados e quais são suas representações com base na documentação da Microsoft, podemos esperar um resultado como esse abaixo. Ressalto que foi utilizado uma conta participante do grupo de Domain Admins.</p>
+<figure><img src="https://i.imgur.com/oUgsgec.png">
+</figure>
+
+<h2 id="conclusão">Conclusão</h2>
+<p>Assim, podemos compreender a relevância do ntSecurityDescriptor no Active Directory e como podemos utilizar dele para encontrar meios para realizar uma escalação de privilégios por meio de objetos presentes no ambiente.  Como citado anteriormente, a ferramenta BloodHound faz um ótimo trabalhando usufruindo desse atributo para construir caminhos e gráficos com base nas informações coletadas do ambiente. Entende-se que tudo isso é principalmente útil para atacantes, todavia, esse tipo de processo também é de grande utilidade também para os times de operações defensivas, visto que poderam encontrar fragilidades na arquitetura monitorada.</p>
+<h2 id="referências">Referências</h2>
+<ul>
+<li><a href="https://github.com/oppsec/breads">BREADS&rsquo;s GitHub Project</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/adschema/a-ntsecuritydescriptor">Windows NTSecurityDescriptor</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/adschema/c-samdomainbase">Windows samDomainBase Ad Schema</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/adschema/c-top">Windows Top Ad Schema</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format">Security Descriptor String Format</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/secgloss/a-gly">Microsoft &lsquo;A&rsquo; Glossary</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/secgloss/d-gly">Microsoft &lsquo;D&rsquo; Glossary</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/secauthz/access-control-lists">Windows ACL</a></li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/4f4251cc-23b6-44b6-93ba-69688422cb06">Security Descriptor Description Language</a></li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/7d4dac05-9cef-4563-a058-f108abecce1d">SECURITY_DESCRIPTOR</a></li>
+<li><a href="https://github.com/fortra/impacket/blob/f8899e65f16c50b871863528d419cfb701a5a3e3/impacket/ldap/ldaptypes.py">Impacket LdapTypes</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/iads/ne-iads-ads_rights_enum">Windows ADS Rights Enum</a></li>
+<li><a href="https://www.installsetupconfig.com/win32programming/accesscontrollistacl2_1.html">Windows ACL Article</a></li>
+</ul>
+<h3 id="tags">Tags</h3>
+
+			</div>
+
+			<div class="tags">
+				
+					
+						<ul class="flat">
+							
+							<li><a href="/tags/pentest">pentest</a></li>
+							
+							<li><a href="/tags/active-directory">active directory</a></li>
+							
+							<li><a href="/tags/red-team">red team</a></li>
+							
+							<li><a href="/tags/ldap">ldap</a></li>
+							
+						</ul>
+					
+				
+			</div></div>
+	</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div>2024  <a href="https://github.com/knadh/hugo-ink">Ink</a> theme on <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+<script>feather.replace()</script>
+</body>
+</html>

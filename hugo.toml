@@ -1,0 +1,54 @@
+languageCode = 'en-us'
+title = "oppsec's blog"
+theme = 'hugo-ink'
+license = 'MIT'
+description = 'Sharing what I like and write'
+name = "oppsec's blog"
+tags = ["pentest", "web", "ad", "redteam", "red team", "active directory", "javascript"]
+paginate = 5
+
+pygmentsstyle = "vs"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+[params]
+	avatar = "https://avatars.githubusercontent.com/u/50470310"
+	featherIconsCDN = true
+
+# Nav.
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "All posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 3
+
+[[params.social]]
+name = "Github"
+icon = "github"
+url = "https://github.com/oppsec/"
+
+[[params.social]]
+name = "Twitter"
+icon = "twitter"
+url = "https://twitter.com/opps3c"
+
+[[params.social]]
+name = "LinkedIn"
+icon = "linkedin"
+url = "https://linkedin.com/in/dansdm"
+
+[[params.author.name]]
+name = "Daniel Moura"
+homepage = "https://github.com/oppsec"
+
+[taxonomies]
+   tag = "tags"

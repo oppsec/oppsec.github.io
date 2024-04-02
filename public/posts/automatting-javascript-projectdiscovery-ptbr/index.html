@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷) - oppsec&#39;s blog</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta itemprop="name" content="Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷)">
+<meta itemprop="description" content="Um guia simples e prático de como podemos automatizar o escaneamento de arquivos JavaScript com ferramentas da ProjectDiscovery"><meta itemprop="datePublished" content="2024-03-28T16:25:49-03:00" />
+<meta itemprop="dateModified" content="2024-03-28T16:25:49-03:00" />
+<meta itemprop="wordCount" content="703">
+<meta itemprop="keywords" content="pentest,javascript,automation,bug bounty," /><meta property="og:title" content="Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷)" />
+<meta property="og:description" content="Um guia simples e prático de como podemos automatizar o escaneamento de arquivos JavaScript com ferramentas da ProjectDiscovery" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//localhost:1313/posts/automatting-javascript-projectdiscovery-ptbr/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-03-28T16:25:49-03:00" />
+<meta property="article:modified_time" content="2024-03-28T16:25:49-03:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷)"/>
+<meta name="twitter:description" content="Um guia simples e prático de como podemos automatizar o escaneamento de arquivos JavaScript com ferramentas da ProjectDiscovery"/>
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" media="screen" href="//localhost:1313/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="//localhost:1313/css/main.css" />
+
+        <link id="dark-scheme" rel="stylesheet" type="text/css" href="//localhost:1313/css/dark.css" />
+
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+		<script src="//localhost:1313/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper">
+		<div class="header">
+	
+		<div class="avatar">
+			<a href="//localhost:1313/">
+				<img src="https://avatars.githubusercontent.com/u/50470310" alt="oppsec&#39;s blog" />
+			</a>
+		</div>
+	
+	<h1 class="site-title"><a href="//localhost:1313/">oppsec&#39;s blog</a></h1>
+	<div class="site-description"><nav class="nav social">
+			<ul class="flat"><li><a href="https://github.com/oppsec/" title="Github"><i data-feather="github"></i></a></li><li><a href="https://twitter.com/opps3c" title="Twitter"><i data-feather="twitter"></i></a></li><li><a href="https://linkedin.com/in/dansdm" title="LinkedIn"><i data-feather="linkedin"></i></a></li></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">All posts</a>
+			</li>
+			
+			<li>
+				<a href="/tags">Tags</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post">
+			<div class="post-header">
+				
+					<div class="meta">
+						<div class="date">
+							<span class="day">28</span>
+							<span class="rest">Mar 2024</span>
+						</div>
+					</div>
+				
+				<div class="matter">
+					<h1 class="title">Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷)</h1>
+				</div>
+			</div>
+					
+			<div class="markdown">
+				<h2 id="introdução">Introdução</h2>
+<p>Olá pessoal, espero que todos estejam bem. Me chamo Daniel (mais conhecido como oppsec), sou um pentester em uma empresa brasileira e bug hunter nos meus tempos livres. Gostaria de compartilhar com vocês uma automação que eu faço através das ferramentas da <a href="https://github.com/projectdiscovery/">ProjectDiscovery</a>.</p>
+<p>Para vocês que talvez não saibam, <strong>ProjectDiscovery</strong> é a equipe responsável pelo desenvolvimento de diversas ferramentas como Nuclei, Httpx, Katana, DnsX, entre outras. Gosto bastante de todo o projeto, e a intenção de facilitar e automatizar alguns processos de pentest é realmente útil. Utilizo o Nuclei, Httpx e outros projetos deles há bastante tempo, e tudo sempre funcionou bem.</p>
+<p>Basicamente, vou demonstrar como você pode combinar algumas ferramentas da ProjectDiscovery para automatizar a captura e o escaneamento de JavaScripts em busca de segredos (chaves de API, senhas e afins), combinando o Subfinder, Httpx, Katana e Nuclei (nuclei-templates).</p>
+<figure><img src="https://compote.slate.com/images/d821ec33-6e11-4cf1-a5e1-64e48f0173b7.jpeg">
+</figure>
+
+<hr>
+<h2 id="preparando-o-ambiente">Preparando o ambiente</h2>
+<p>Para começar, você precisa instalar todas as ferramentas que iremos utilizar. Considerando que você já tem o Go instalado em sua máquina, com uma versão superior a 1.21, aqui está a lista de comandos para instalar as ferramentas:</p>
+<ul>
+<li>Nuclei</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+</span></span></code></pre></div><ul>
+<li>Subfinder</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+</span></span></code></pre></div><ul>
+<li>Httpx</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+</span></span></code></pre></div><ul>
+<li>Katana</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go install -v github.com/projectdiscovery/katana/cmd/katana@latest
+</span></span></code></pre></div><p>Certifique-se de que a variável de ambiente <code>GOPATH</code> está definida corretamente para que você possa executar as ferramentas diretamente pelo seu terminal.</p>
+<blockquote>
+<p>Para instalar o <code>nuclei-templates</code>, é necessário executar a ferramenta nuclei pelo menos uma vez.</p>
+</blockquote>
+<hr>
+<h2 id="o-início">O início</h2>
+<p>Após instalar todas as ferramentas, podemos começar a utilizá-las para fazer um pouco de magia. Assim, precisamos enumerar os subdomínios do nosso alvo para depois capturar todos os endpoints. Estarei utilizando o Subfinder para isso. Recomendo que vocês configurem algumas <a href="https://highon.coffee/blog/subfinder-cheat-sheet/">chaves de API que o Subfinder suporta</a>; isso vai ajudar a encontrar mais subdomínios.</p>
+<p>O comando que iremos utilizar é <strong><code>subfinder -all -d target.domain -o domains.txt</code></strong>. Podemos esperar um resultado parecido com isso:
+<img src="https://i.imgur.com/JaUc6vx.png" alt="subfinder"></p>
+<p>Após enumerar todos os subdomínios e salvar a saída do comando em um arquivo de texto, precisamos verificar quais estão ativos ou não. Você pode utilizar esse comando: <strong><code>httpx -l domains.txt -o domains.httpx</code></strong></p>
+<p><em>Dica: Você pode especificar portas diferentes como 8080, 8081, 81 e outras para encontrar outros serviços que rodam sobre o mesmo ativo.</em></p>
+<figure><img src="https://i.imgur.com/OGKJUFH.png">
+</figure>
+
+<p>Esse é um dos principais processos que utilizaremos para capturar os arquivos JavaScript. Vamos usar o Katana para capturar todos os endpoints dos subdomínios encontrados, utilizando o atributo <code>-jc</code>. Eu usarei esse comando, mas você pode aprimorá-lo com o grep e outros binários: <strong><code>cat domains.httpx | katana -jc -o endpoints.txt</code></strong>.</p>
+<figure><img src="https://i.imgur.com/pOE0fc3.png">
+</figure>
+
+<p>Com todos os endpoints capturados, filtraremos aqueles que terminam com <strong>.js</strong>. Para isso, utilizaremos <strong><code>grep '.js' endpoints.txt &gt; js_files.txt</code></strong>. No entanto, isso também armazenará os endpoints que terminam com .json. Para removê-los, podemos utilizar o grep novamente: <strong><code>grep -v '.json' js_files.txt &gt; js_files_cleaned.txt</code></strong>.</p>
+<p><figure><img src="https://i.imgur.com/uaQUI3v.png">
+</figure>
+
+<figure><img src="https://i.imgur.com/acyk9Ou.png">
+</figure>
+</p>
+<p>Depois de filtrar os endpoints, precisamos salvar os arquivos JavaScript em algum lugar. Vamos combinar os binários <strong>cURL</strong> e <strong>xargs</strong> para salvá-los em um diretório. Podemos utilizar o <em>awk</em> para extrair o nome do domínio e o nome do arquivo, facilitando a identificação posteriormente. Antes de executar o comando abaixo, certifique-se de que você está em um diretório apropriado para armazenar todos os arquivos JavaScript.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>while read url; do
+</span></span><span style="display:flex;"><span>  filename=$(echo $url | awk -F/ &#39;{gsub(/[\/:]/, &#34;-&#34;, $3); print $3 &#34;-&#34; $NF}&#39;)
+</span></span><span style="display:flex;"><span>  curl &#34;$url&#34; &gt; &#34;${filename}.js&#34;
+</span></span><span style="display:flex;"><span>done &lt; ../js_files_cleaned.txt
+</span></span></code></pre></div><figure><img src="https://i.imgur.com/CErGIC0.png">
+</figure>
+
+<hr>
+<h2 id="o-fim">O fim</h2>
+<p>O resultado final do comando será algo parecido com o seguinte:</p>
+<figure><img src="https://i.imgur.com/VIvgXOx.png">
+</figure>
+
+<p>Agora, para encontrarmos possíveis vazamentos de segredos (secrets) no código, utilizaremos o Nuclei juntamente com os nuclei-templates. Este é o comando que venho utilizando, e sempre funcionou para mim:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>find &lt;js_files_path&gt; -type f -name &#34;*.js&#34; | while read jsfile; do nuclei -t ~/nuclei-templates/file/ -target &#34;$jsfile&#34; -severity low,medium,high,critical -et ~/nuclei-templates/file/xss/dom-xss.yaml; done
+</span></span></code></pre></div><p><figure><img src="https://i.imgur.com/TjDh4oE.png">
+</figure>
+
+<figure><img src="https://i.imgur.com/a5hZ5ql.png">
+</figure>
+</p>
+<hr>
+<h2 id="avisos-e-declarações">Avisos e Declarações</h2>
+<ul>
+<li>Você provavelmente será bloqueado pelo WAF (Web Application Firewall), então tenha cuidado.</li>
+<li>Naturalmente, haverá muitos falsos positivos, portanto, seja paciente e verifique cada resultado para determinar o que é verdadeiro ou não.</li>
+<li>Existem, provavelmente, outras maneiras melhores de realizar essa tarefa, mas acredito que esta também seja eficaz. Use essa se quiser.</li>
+<li>Não estou compartilhando isso para provar qualquer ponto específico, apenas acredito que possa ser útil para pessoas interessadas em experimentar abordagens diferentes.</li>
+</ul>
+<hr>
+<h2 id="referências">Referências</h2>
+<ul>
+<li><a href="https://highon.coffee/blog/subfinder-cheat-sheet/">Subfinder Cheatsheet</a></li>
+<li><a href="https://github.com/projectdiscovery">ProjectDiscovery</a></li>
+<li><a href="https://www.youtube.com/watch?v=9d1D-DB6BkE">Davis Sopas -  Using katana to get API endpoints</a></li>
+</ul>
+<h3 id="tags">Tags</h3>
+
+			</div>
+
+			<div class="tags">
+				
+					
+						<ul class="flat">
+							
+							<li><a href="/tags/pentest">pentest</a></li>
+							
+							<li><a href="/tags/javascript">javascript</a></li>
+							
+							<li><a href="/tags/automation">automation</a></li>
+							
+							<li><a href="/tags/bug-bounty">bug bounty</a></li>
+							
+						</ul>
+					
+				
+			</div></div>
+	</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div>2024  <a href="https://github.com/knadh/hugo-ink">Ink</a> theme on <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+<script>feather.replace()</script>
+</body>
+</html>
