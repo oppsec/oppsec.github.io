@@ -1,5 +1,5 @@
 +++
-title = 'Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷)'
+title = 'Escanenado arquivos JavaScript com a ProjectDiscovery'
 date = 2024-03-28T16:25:49-03:00
 draft = false
 description = "Um guia simples e prático de como podemos automatizar o escaneamento de arquivos JavaScript com ferramentas da ProjectDiscovery"
@@ -7,8 +7,6 @@ tags = ['pentest', 'javascript', 'automation', 'bug bounty']
 +++
 
 ## Introdução
-Olá pessoal, espero que todos estejam bem. Me chamo Daniel (mais conhecido como oppsec), sou um pentester em uma empresa brasileira e bug hunter nos meus tempos livres. Gostaria de compartilhar com vocês uma automação que eu faço através das ferramentas da [ProjectDiscovery](https://github.com/projectdiscovery/).
-
 Para vocês que talvez não saibam, **ProjectDiscovery** é a equipe responsável pelo desenvolvimento de diversas ferramentas como Nuclei, Httpx, Katana, DnsX, entre outras. Gosto bastante de todo o projeto, e a intenção de facilitar e automatizar alguns processos de pentest é realmente útil. Utilizo o Nuclei, Httpx e outros projetos deles há bastante tempo, e tudo sempre funcionou bem.
 
 Basicamente, vou demonstrar como você pode combinar algumas ferramentas da ProjectDiscovery para automatizar a captura e o escaneamento de JavaScripts em busca de segredos (chaves de API, senhas e afins), combinando o Subfinder, Httpx, Katana e Nuclei (nuclei-templates).

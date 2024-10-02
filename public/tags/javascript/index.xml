@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Javascript on oppsec&#39;s blog</title>
+    <title>Javascript on 1337.coffee</title>
     <link>//localhost:1313/tags/javascript/</link>
-    <description>Recent content in Javascript on oppsec&#39;s blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <description>Recent content in Javascript on 1337.coffee</description>
+    <generator>Hugo</generator>
+    <language>en</language>
     <lastBuildDate>Thu, 28 Mar 2024 16:25:49 -0300</lastBuildDate>
     <atom:link href="//localhost:1313/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -13,14 +13,14 @@
       <link>//localhost:1313/posts/automatting-javascript-projectdiscovery/</link>
       <pubDate>Thu, 28 Mar 2024 16:25:49 -0300</pubDate>
       <guid>//localhost:1313/posts/automatting-javascript-projectdiscovery/</guid>
-      <description>Introduction Hello guys, I hope you&amp;rsquo;re doing well. I am Daniel (a.k.a oppsec), a pentester from a Brazilian company and a bug hunter in my free time. I would like to share with you some interesting automation that I&amp;rsquo;ve done with the ProjectDiscovery toolkit.&#xA;For you guys that don&amp;rsquo;t know, ProjectDiscovery is the team responsible for the development of various tools like Nuclei, Httpx, Katana, DnsX, and a lot more&amp;hellip; I really like the entire project and the intention of making some pentest processes easier and automated is so useful.</description>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Hello guys, I hope you&amp;rsquo;re doing well. I am Daniel (a.k.a oppsec), a pentester from a Brazilian company and a bug hunter in my free time.&#xA;I would like to share with you some interesting automation that I&amp;rsquo;ve done with the &lt;a href=&#34;https://github.com/projectdiscovery/&#34;&gt;ProjectDiscovery&lt;/a&gt; toolkit.&lt;/p&gt;&#xA;&lt;p&gt;For you guys that don&amp;rsquo;t know, &lt;strong&gt;ProjectDiscovery&lt;/strong&gt; is the team responsible for the development of various tools like Nuclei, Httpx, Katana, DnsX, and a lot more&amp;hellip; I really like the entire&#xA;project and the intention of making some pentest processes easier and automated is so useful. I&amp;rsquo;ve been using Nuclei, Httpx, and other toiols by him and everything always worked fine for me.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷)</title>
       <link>//localhost:1313/posts/automatting-javascript-projectdiscovery-ptbr/</link>
       <pubDate>Thu, 28 Mar 2024 16:25:49 -0300</pubDate>
       <guid>//localhost:1313/posts/automatting-javascript-projectdiscovery-ptbr/</guid>
-      <description>Introdução Olá pessoal, espero que todos estejam bem. Me chamo Daniel (mais conhecido como oppsec), sou um pentester em uma empresa brasileira e bug hunter nos meus tempos livres. Gostaria de compartilhar com vocês uma automação que eu faço através das ferramentas da ProjectDiscovery.&#xA;Para vocês que talvez não saibam, ProjectDiscovery é a equipe responsável pelo desenvolvimento de diversas ferramentas como Nuclei, Httpx, Katana, DnsX, entre outras. Gosto bastante de todo o projeto, e a intenção de facilitar e automatizar alguns processos de pentest é realmente útil.</description>
+      <description>&lt;h2 id=&#34;introdução&#34;&gt;Introdução&lt;/h2&gt;&#xA;&lt;p&gt;Olá pessoal, espero que todos estejam bem. Me chamo Daniel (mais conhecido como oppsec), sou um pentester em uma empresa brasileira e bug hunter nos meus tempos livres. Gostaria de compartilhar com vocês uma automação que eu faço através das ferramentas da &lt;a href=&#34;https://github.com/projectdiscovery/&#34;&gt;ProjectDiscovery&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Para vocês que talvez não saibam, &lt;strong&gt;ProjectDiscovery&lt;/strong&gt; é a equipe responsável pelo desenvolvimento de diversas ferramentas como Nuclei, Httpx, Katana, DnsX, entre outras. Gosto bastante de todo o projeto, e a intenção de facilitar e automatizar alguns processos de pentest é realmente útil. Utilizo o Nuclei, Httpx e outros projetos deles há bastante tempo, e tudo sempre funcionou bem.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

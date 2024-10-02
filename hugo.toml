@@ -1,54 +1,59 @@
-languageCode = 'en-us'
-title = "oppsec's blog"
-theme = 'hugo-ink'
+languageCode = "en"
+DefaultContentLanguage = "en"
+title = "1337.coffee"
+theme = 'risotto'
 license = 'MIT'
 description = 'Sharing what I like and write'
-name = "oppsec's blog"
+name = "1337.coffee"
 tags = ["pentest", "web", "ad", "redteam", "red team", "active directory", "javascript"]
-paginate = 5
+paginate = 3
 
 pygmentsstyle = "vs"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 
+sectionPagesMenu = "main"
+enableInlineShortcodes = true
+
 [params]
-	avatar = "https://avatars.githubusercontent.com/u/50470310"
-	featherIconsCDN = true
+noindex = false
 
-# Nav.
-[[menu.main]]
-name = "Home"
-url = "/"
-weight = 1
+[menu]
 
-[[menu.main]]
-name = "All posts"
-url = "/posts"
-weight = 2
+  [[menu.main]]
+    identifier = "main"
+    name = "Home"
+    url = "/"
+    weight = 1
 
-[[menu.main]]
-name = "Tags"
-url = "/tags"
-weight = 3
-
-[[params.social]]
-name = "Github"
-icon = "github"
+[[params.socialLinks]]
+icon = "fa-brands fa-github"
+title = "GitHub"
 url = "https://github.com/oppsec/"
 
-[[params.social]]
-name = "Twitter"
-icon = "twitter"
-url = "https://twitter.com/opps3c"
+[[params.socialLinks]]
+icon = "fa-brands fa-twitter"
+title = "GitHub"
+url = "https://x.com/opps3c"
 
-[[params.social]]
-name = "LinkedIn"
-icon = "linkedin"
-url = "https://linkedin.com/in/dansdm"
-
-[[params.author.name]]
-name = "Daniel Moura"
-homepage = "https://github.com/oppsec"
+[[params.socialLinks]]
+icon = "fa-brands fa-linkedin"
+title = "GitHub"
+url = "https://www.linkedin.com/in/dansdm/"
 
 [taxonomies]
-   tag = "tags"
+category = "categories"
+tag = "tags"
+series = "series"
+
+[params.theme]
+palette = "material"
+
+# Sidebar: about/bio
+[params.about]
+title = "About me"
+description = "Pentester at Brazilian company, Python developer in free time and eWPTX, CEH Practical certified."
+# unicode/emoji logo:
+logo = "☕️"
+# or use an image:
+#logo_image = "images/rice.svg"

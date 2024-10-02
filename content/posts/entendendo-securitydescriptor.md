@@ -1,5 +1,5 @@
 +++
-title = "Entendendo o que é o Security Descriptor (🇧🇷)"
+title = "Security Descriptor, o que é? o que come?"
 date = 2024-03-30T12:20:49-03:00
 draft = false
 description = "O Security Descriptor ou ntSecurityDescriptor é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto. Como podemos utilizar ele em segurança ofensiva?"

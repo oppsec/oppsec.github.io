@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Ldap on oppsec&#39;s blog</title>
+    <title>Ldap on 1337.coffee</title>
     <link>//localhost:1313/tags/ldap/</link>
-    <description>Recent content in Ldap on oppsec&#39;s blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <description>Recent content in Ldap on 1337.coffee</description>
+    <generator>Hugo</generator>
+    <language>en</language>
     <lastBuildDate>Sat, 30 Mar 2024 12:20:49 -0300</lastBuildDate>
     <atom:link href="//localhost:1313/tags/ldap/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -13,7 +13,7 @@
       <link>//localhost:1313/posts/entendendo-securitydescriptor/</link>
       <pubDate>Sat, 30 Mar 2024 12:20:49 -0300</pubDate>
       <guid>//localhost:1313/posts/entendendo-securitydescriptor/</guid>
-      <description>O que é o ntSecurityDescriptor? O Security Descriptor ou ntSecurityDescriptor, é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto em questão. Podemos interpretar o mesmo como uma ideia do escopo de permissões do X sobre Y. O ntSecurityDescriptor está presente desde as versões superiores do Windows Server 2000 e se manteve o mesmo desde então.&#xA;O Security Descriptor é uma representação binária compactada da segurança associada a objeto pertecente ao ambiente.</description>
+      <description>&lt;figure&gt;&lt;img src=&#34;https://i.imgur.com/berSDkH.jpeg&#34;&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;h2 id=&#34;o-que-é-o-security-descriptor&#34;&gt;O que é o Security Descriptor?&lt;/h2&gt;&#xA;&lt;p&gt;O Security Descriptor ou ntSecurityDescriptor, é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto em questão. Podemos interpretar o mesmo como uma ideia do escopo de permissões do X sobre Y. O ntSecurityDescriptor está presente desde as versões superiores do Windows Server 2000 e se manteve o mesmo desde então.&lt;/p&gt;&#xA;&lt;p&gt;O Security Descriptor é uma representação binária compactada da segurança associada a objeto pertecente ao ambiente. Para comprovação disso, podemos tentar extrair o Security Descriptor de um usuário ou grupo por meio de uma query LDAP e vermos seu formato puro.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

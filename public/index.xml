@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>oppsec&#39;s blog</title>
+    <title>1337.coffee</title>
     <link>//localhost:1313/</link>
-    <description>Recent content on oppsec&#39;s blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <description>Recent content on 1337.coffee</description>
+    <generator>Hugo</generator>
+    <language>en</language>
     <lastBuildDate>Sat, 30 Mar 2024 12:20:49 -0300</lastBuildDate>
     <atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Entendendo o que é o Security Descriptor (🇧🇷)</title>
+      <title>Security Descriptor, o que é? o que come?</title>
       <link>//localhost:1313/posts/entendendo-securitydescriptor/</link>
       <pubDate>Sat, 30 Mar 2024 12:20:49 -0300</pubDate>
       <guid>//localhost:1313/posts/entendendo-securitydescriptor/</guid>
-      <description>O que é o ntSecurityDescriptor? O Security Descriptor ou ntSecurityDescriptor, é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto em questão. Podemos interpretar o mesmo como uma ideia do escopo de permissões do X sobre Y. O ntSecurityDescriptor está presente desde as versões superiores do Windows Server 2000 e se manteve o mesmo desde então.&#xA;O Security Descriptor é uma representação binária compactada da segurança associada a objeto pertecente ao ambiente.</description>
+      <description>&lt;figure&gt;&lt;img src=&#34;https://i.imgur.com/berSDkH.jpeg&#34;&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;h2 id=&#34;o-que-é-o-security-descriptor&#34;&gt;O que é o Security Descriptor?&lt;/h2&gt;&#xA;&lt;p&gt;O Security Descriptor ou ntSecurityDescriptor, é um atributo de segurança do Windows que contém uma estrutura de dados representativa das permissões e propriedades daquele objeto em questão. Podemos interpretar o mesmo como uma ideia do escopo de permissões do X sobre Y. O ntSecurityDescriptor está presente desde as versões superiores do Windows Server 2000 e se manteve o mesmo desde então.&lt;/p&gt;&#xA;&lt;p&gt;O Security Descriptor é uma representação binária compactada da segurança associada a objeto pertecente ao ambiente. Para comprovação disso, podemos tentar extrair o Security Descriptor de um usuário ou grupo por meio de uma query LDAP e vermos seu formato puro.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Automating JavaScript Secret Scanning with ProjectDiscovery toolkit - Simple Techniques #1</title>
-      <link>//localhost:1313/posts/automatting-javascript-projectdiscovery/</link>
-      <pubDate>Thu, 28 Mar 2024 16:25:49 -0300</pubDate>
-      <guid>//localhost:1313/posts/automatting-javascript-projectdiscovery/</guid>
-      <description>Introduction Hello guys, I hope you&amp;rsquo;re doing well. I am Daniel (a.k.a oppsec), a pentester from a Brazilian company and a bug hunter in my free time. I would like to share with you some interesting automation that I&amp;rsquo;ve done with the ProjectDiscovery toolkit.&#xA;For you guys that don&amp;rsquo;t know, ProjectDiscovery is the team responsible for the development of various tools like Nuclei, Httpx, Katana, DnsX, and a lot more&amp;hellip; I really like the entire project and the intention of making some pentest processes easier and automated is so useful.</description>
-    </item>
-    <item>
-      <title>Automatizando o escaneamento por secrets em arquivos JavaScript com ferramentas da ProjectDiscovery - Simple Techniques #1 (🇧🇷)</title>
+      <title>Escanenado arquivos JavaScript com a ProjectDiscovery</title>
       <link>//localhost:1313/posts/automatting-javascript-projectdiscovery-ptbr/</link>
       <pubDate>Thu, 28 Mar 2024 16:25:49 -0300</pubDate>
       <guid>//localhost:1313/posts/automatting-javascript-projectdiscovery-ptbr/</guid>
-      <description>Introdução Olá pessoal, espero que todos estejam bem. Me chamo Daniel (mais conhecido como oppsec), sou um pentester em uma empresa brasileira e bug hunter nos meus tempos livres. Gostaria de compartilhar com vocês uma automação que eu faço através das ferramentas da ProjectDiscovery.&#xA;Para vocês que talvez não saibam, ProjectDiscovery é a equipe responsável pelo desenvolvimento de diversas ferramentas como Nuclei, Httpx, Katana, DnsX, entre outras. Gosto bastante de todo o projeto, e a intenção de facilitar e automatizar alguns processos de pentest é realmente útil.</description>
+      <description>&lt;h2 id=&#34;introdução&#34;&gt;Introdução&lt;/h2&gt;&#xA;&lt;p&gt;Para vocês que talvez não saibam, &lt;strong&gt;ProjectDiscovery&lt;/strong&gt; é a equipe responsável pelo desenvolvimento de diversas ferramentas como Nuclei, Httpx, Katana, DnsX, entre outras. Gosto bastante de todo o projeto, e a intenção de facilitar e automatizar alguns processos de pentest é realmente útil. Utilizo o Nuclei, Httpx e outros projetos deles há bastante tempo, e tudo sempre funcionou bem.&lt;/p&gt;&#xA;&lt;p&gt;Basicamente, vou demonstrar como você pode combinar algumas ferramentas da ProjectDiscovery para automatizar a captura e o escaneamento de JavaScripts em busca de segredos (chaves de API, senhas e afins), combinando o Subfinder, Httpx, Katana e Nuclei (nuclei-templates).&lt;/p&gt;</description>
     </item>
     <item>
       <title>About</title>
       <link>//localhost:1313/contact/</link>
       <pubDate>Fri, 19 Apr 2019 21:37:58 +0530</pubDate>
       <guid>//localhost:1313/contact/</guid>
-      <description>This is some static page where you can write about yourself.</description>
+      <description>&lt;p&gt;This is some static page where you can write about yourself.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
