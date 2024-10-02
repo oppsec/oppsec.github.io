@@ -1,5 +1,3 @@
-/* Override this file to customise the theme's CSS for your site */
-
 span[style*="color:#a31515"] {
     color: #bea0ff !important;
 }
